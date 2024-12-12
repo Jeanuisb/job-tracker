@@ -1,30 +1,34 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const JobForm = () => {
   const [formData, setFormData] = useState({
-    dateApplied: '',
-    company: '',
-    title: '',
-    status: '',
-    site: '',
-    resume: '',
-    location: '',
-    office: 'remote',
-    salary: '',
-    interview: '',
-    notes: '',
+    dateApplied: "",
+    company: "",
+    title: "",
+    status: "",
+    site: "",
+    resume: "",
+    location: "",
+    office: "remote",
+    salary: "",
+    interview: "",
+    notes: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form data:', formData); // For now, just log it
+    console.log("Form submitted:", formData);
+    // Later, we'll save the data to localStorage or a backend API
+    alert("Job application added successfully!");
   };
 
   return (
@@ -59,8 +63,72 @@ const JobForm = () => {
           className="w-full border border-gray-300 rounded-lg p-2"
         />
       </div>
-      {/* Add similar input fields for the rest of the data */}
-      <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Status</label>
+        <input
+          type="text"
+          name="status"
+          value={formData.status}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Site</label>
+        <input
+          type="text"
+          name="site"
+          value={formData.site}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Office Type</label>
+        <select
+          name="office"
+          value={formData.office}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        >
+          <option value="remote">Remote</option>
+          <option value="hybrid">Hybrid</option>
+          <option value="in-person">In-Person</option>
+        </select>
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Salary</label>
+        <input
+          type="text"
+          name="salary"
+          value={formData.salary}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Interview</label>
+        <input
+          type="text"
+          name="interview"
+          value={formData.interview}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Notes</label>
+        <textarea
+          name="notes"
+          value={formData.notes}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+      >
         Save Job Application
       </button>
     </form>
