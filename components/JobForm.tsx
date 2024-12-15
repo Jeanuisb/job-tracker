@@ -84,6 +84,26 @@ const JobForm = () => {
         />
       </div>
       <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Location</label>
+        <input
+          type="text"
+          name="Location"
+          value={formData.location}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Resume</label>
+        <input
+          type="text"
+          name="resume"
+          value={formData.resume}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+        />
+      </div>
+      <div className="mb-4">
         <label className="block text-gray-700 font-medium">Office Type</label>
         <select
           name="office"
@@ -99,7 +119,7 @@ const JobForm = () => {
       <div className="mb-4">
         <label className="block text-gray-700 font-medium">Salary</label>
         <input
-          type="text"
+          type="number"
           name="salary"
           value={formData.salary}
           onChange={handleChange}
