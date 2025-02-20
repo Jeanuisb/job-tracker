@@ -80,11 +80,3 @@ Deploy this app using the [Vercel Platform](https://vercel.com/). For more detai
 
 Contributions are welcome! Fork the repository, make your changes, and submit a pull request.
 
-## License
-
-This project is licensed under the MIT License.
-```
-
----
-
-This version keeps the essential parts of the original template but customizes it to reflect your project details and current progress. Let me know if you’d like further tweaks!
