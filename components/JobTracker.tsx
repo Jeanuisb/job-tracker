@@ -12,7 +12,7 @@ export default function JobTracker({ initialData }: { initialData: any[] }) {
     status: "",
     site: "",
     location: "",
-    resume: "",
+    resume: null,
     office: "remote",
     salary: "",
     interview: "",
@@ -20,70 +20,46 @@ export default function JobTracker({ initialData }: { initialData: any[] }) {
   });
   
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, files } = e.target as HTMLInputElement & { files: FileList | null };
+    setFormData({
+      ...formData,
+      [name]: name === "resume" && files ? files[0] : value,
+    });
   };
+  
 
   const handleAddJob = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-  
-    // Create a FormData object
-    const formDataObj = new FormData();
-    formDataObj.append("dateApplied", formData.dateApplied);
-    formDataObj.append("company", formData.company);
-    formDataObj.append("title", formData.title);
-    formDataObj.append("status", formData.status);
-    formDataObj.append("site", formData.site);
-    formDataObj.append("location", formData.location);
-    formDataObj.append("office", formData.office);
-    formDataObj.append("salary", formData.salary);
-    formDataObj.append("interview", formData.interview);
-    formDataObj.append("notes", formData.notes);
-  
-    if (formData.resume) {
-      formDataObj.append("resume", formData.resume); // Add the file to FormData
-    }
-  
-    try {
-      const res = await fetch("/api/job-applications", {
-        method: "POST",
-        body: formDataObj, // Send the FormData object
-      });
-      
-      console.log('Payload:', formDataObj);
 
-  
-      if (!res.ok) {
-        const error = await res.text();
-        console.error("API Response Error:", error);
-        alert("Error saving job application.");
-        return;
-      }
-  
-      const savedJob = await res.json();
-      console.log("New job saved:", savedJob);
-  
-      setJobApplications((prev) => [...prev, savedJob]);
-  
-      setFormData({
-        dateApplied: "",
-        company: "",
-        title: "",
-        status: "",
-        site: "",
-        resume: "" , // Reset the file field
-        location: "",
-        office: "remote",
-        salary: "",
-        interview: "",
-        notes: "",
-      });
-    } catch (error) {
-      console.error("Error submitting job application:", error);
-      alert("An error occurred while saving the job application.");
+  const formDataToSend = new FormData();
+  Object.keys(formData).forEach((key) => {
+    const value = formData[key as keyof typeof formData];
+    if (value && typeof value === "object" && "name" in value) {
+      // Check for File object
+      formDataToSend.append(key, value as File);
+    } else if (value !== null && value !== undefined) {
+      // Append other fields
+      formDataToSend.append(key, value.toString());
     }
+  });
+
+  try {
+    const response = await fetch("/api/job-applications", {
+      method: "POST",
+      body: formDataToSend,
+    });
+
+    if (response.ok) {
+      alert("Job application added successfully!");
+    } else {
+      console.error("Error submitting form:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error submitting form:", error);
+  }
   };
   
   
@@ -202,19 +178,16 @@ export default function JobTracker({ initialData }: { initialData: any[] }) {
     </div>
 
     {/* Resume */}
-<div>
-  <label className="block text-sm font-medium mb-1">Resume (PDF or Word)</label>
-  <input
-    type="file"
-    name="resume"
-    accept=".pdf,.doc,.docx"
-    onChange={(e) => {
-      const file = e.target.files ? e.target.files[0] : null;
-      setFormData({ ...formData, resume: "" }); // Store the file object in the state
-    }}
-    className="w-full border border-gray-300 rounded-lg p-2"
-  />
-</div>
+    <div className="mb-4">
+        <label className="block text-gray-700 font-medium">Resume</label>
+        <input
+          type="file"
+          name="resume"
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-lg p-2"
+          
+        />
+      </div>
 
     {/* Location */}
     <div>

@@ -17,9 +17,8 @@ model JobApplication {
   resume      String
   location    String
   office      String
-  salary      Int
-  interview   String @default("No interview scheduled")
-  notes       String @default("")
-
+  salary      String
+  interview   String
+  notes       String
   createdAt   DateTime @default(now())
 }
